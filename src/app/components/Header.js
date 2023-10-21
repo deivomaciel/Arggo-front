@@ -1,0 +1,18 @@
+import Image from 'next/image'
+import Logo from '../assets/logodesk.png'
+ 
+function Header() {
+    return (
+        <header className="inset-x-0 py-2 px-8 lg:px-16 flex items-center justify-between bg-main-200">
+            <figure>
+                <Image 
+                    src={Logo}
+                    alt='Logo - Transferit'
+                    height={40}
+                />
+            </figure>
+        </header>
+    )
+}
+
+export default Header
