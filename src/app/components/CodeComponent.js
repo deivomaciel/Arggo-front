@@ -7,7 +7,7 @@ function Code() {
             <div className='w-72 flex justify-between my-4 '>
                 {codeArray.map(number => {
                     return (
-                        <div  className="w-12 h-12 outline-none flex justify-center items-center rounded-lg border-2 border-zinc-300">
+                        <div key={number} className="w-12 h-12 outline-none flex justify-center items-center rounded-lg border-2 border-zinc-300">
                             <p className="font-bold text-main-200 text-2xl">{number}</p>
                         </div>
                     )
