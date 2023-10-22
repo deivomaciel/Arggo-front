@@ -19,16 +19,16 @@ export default function Chat() {
     const [messageArray, setMessageArray] = useState([]) // BOX
 
     const fileRenders = {
-        image({key, time, file}) { 
-            return <ImageComponent time={time} file={file} key={key} />
+        image({time, file}) { 
+            return <ImageComponent time={time} file={file} />
         },
 
-        documents({key, time, file}) {
-            return <DocsComponent time={time} file={file} key={key} />
+        documents({time, file}) {
+            return <DocsComponent time={time} file={file} />
         },
 
-        text({key, time, content}) {
-            return <TextMessage time={time} content={content} key={key} />
+        text({time, content}) {
+            return <TextMessage time={time} content={content} />
         }
     }
 
@@ -90,7 +90,9 @@ export default function Chat() {
             <div className="w-full flex flex-col justify-between relative">
                 <div ref={parentRef} id='message-container' className='h-full overflow-y-auto p-6 gap-4 flex flex-col bg-footer'>
                     {messageArray.map(message => {
-                        return fileRenders[message.group](message)
+                        return <div className='self-start' key={message.key}>
+                                    {fileRenders[message.group](message)}
+                                </div>
                     })}
                     
                     {
@@ -105,12 +107,12 @@ export default function Chat() {
                 </div>
 
                 <div className="w-full p-6 flex bg-footer">
-                    <form onSubmit={e => sendMessage(e)} className='w-full flex p-2 rounded-lg bg-white'>
+                    <form id='message-form' onSubmit={e => sendMessage(e)} className='w-full flex p-2 rounded-lg bg-white'>
                         <input
                             type='text'
                             spellCheck='true'
                             wrap='soft'
-                            autoComplete='' 
+                            autoComplete='on' 
                             placeholder='Mensagem' 
                             className="w-full resize-none px-4 rounded-lg outline-none "
                             onChange={e => setText(e.target.value)}
