@@ -1,5 +1,5 @@
 import { BsDownload } from 'react-icons/bs'
-import { downloadFile } from '../serveces/chatServeces'
+import { downloadFile } from '../serveces/downloadFiles'
 import Image from 'next/image'
 
 export default function ImageComponent({ time, file}) {

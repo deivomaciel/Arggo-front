@@ -1,6 +1,6 @@
 import { BiSolidFilePdf, BiSolidFileTxt, BiSolidFileDoc } from 'react-icons/bi'
 import { BsDownload } from 'react-icons/bs'
-import { downloadFile } from '../serveces/chatServeces'
+import { downloadFile } from '../serveces/downloadFiles'
 
 export default function DocsComponent({ time, file }) {
     const finalName = file.name.length > 20 ? `${file.name.substr(0, 22)}...` : file.name

@@ -1,15 +1,33 @@
 import { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { ioClient } from '../serveces/server'
+import Cookies from 'js-cookie'
 
 function InputCode() {
+    const router = useRouter()
     const [code, setCode] = useState('')
-  
+    const [invalidState, setInvalidSatate] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('Código inválido!')
+    
     const input1 = useRef(null)
     const input2 = useRef(null)
     const input3 = useRef(null)
     const input4 = useRef(null)
   
     const inputList = [input1, input2, input3, input4]
-  
+
+    ioClient.on('error', error => {
+        setErrorMessage('Código inválido!')
+        setInvalidSatate(error.invalidCode)
+    })
+
+    ioClient.on('connected', msg => {
+        Cookies.set('destiny', msg.destiny)
+        router.replace('/chat')
+    })
+
+    const sendCode = code => ioClient.emit('send-code', code)
+
     const updateInputValue = input => {
         (input.value).length > 1 && (input.value = input.value[0])
         !(code.length >= 4) && setCode(code + input.value)
@@ -34,8 +52,18 @@ function InputCode() {
         }
     }
   
-    const showCode = () => console.log(code)
-  
+    useEffect(() => {
+        code.length < 4 && setInvalidSatate(false)
+        if(code.length == 4) {
+            if(code != localStorage.getItem('code')) {
+                sendCode(code)
+            } else {
+                setErrorMessage('Ops! Você não pode usar este código neste dispositivo.')
+                setInvalidSatate(true)
+            }
+        }
+    }, [code])
+
     useEffect(() => {
         input1.current.disabled = false
         input1.current.focus()
@@ -89,6 +117,8 @@ function InputCode() {
                     aria-label='Number 4'
                 />
             </div>
+
+             {invalidState &&   <p className="text-red-600 -mt-3 mb-3">{errorMessage}</p>}
         </div>
     )
 }

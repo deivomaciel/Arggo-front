@@ -2,12 +2,15 @@
 import { useEffect, useRef, useState } from 'react'
 import { BsFillSendFill } from 'react-icons/bs'
 import { GrAttachment } from 'react-icons/gr'
-import Empty from '../assets/empty.png'
+import Empty from '../../assets/empty.png'
 import Image from 'next/image'
-import TextMessage from '../components/TextMessage'
-import getFileType from '../components/fileGroups'
-import ImageComponent from '../components/ImageComponent'
-import DocsComponent from '../components/DocsComponent'
+import TextMessage from '../../components/TextMessage'
+import getFileType from '../../components/fileGroups'
+import ImageComponent from '../../components/ImageComponent'
+import DocsComponent from '../../components/DocsComponent'
+import Cookies from 'js-cookie'
+import { ioClient } from '@/app/serveces/server'
+import Header from '@/app/components/Header'
 import './styles.css'
 
 export default function Chat() {
@@ -15,6 +18,7 @@ export default function Chat() {
     const textInputRef = useRef(null)
     const parentRef = useRef(null)
     const childRef = useRef(null)
+    const [destinyUid, setDestinyUid] = useState()
     
     const [messageArray, setMessageArray] = useState([]) // BOX
 
@@ -50,20 +54,16 @@ export default function Chat() {
             time: getCurrentTime(),
             file: file,
         }])
-
-        setTimeout(() => {
-            childRef.current.scrollIntoView({ behavior: 'smooth' })
-        }, 0)
     }
 
-    const sendInputText = () => {
-        if(text) {
+    const sendInputText = textToShow => {
+        if(textToShow) {
             setMessageArray([...messageArray, {
                 group: 'text',
                 key: messageArray.length,
                 time: getCurrentTime(),
                 name: 'TextMessage',
-                content: text
+                content: textToShow
             }])
 
             setText(null)
@@ -72,23 +72,35 @@ export default function Chat() {
         }
     }
 
+    ioClient.on('recive-message', msg => sendInputText(msg))
+
     const sendMessage = e => {
         e.preventDefault()
-        sendInputText()
-        
-        setTimeout(() => {
-            childRef.current.scrollIntoView({ behavior: 'smooth' })
-        }, 0)
+        sendInputText(text)
+        ioClient.emit('send-message', { destiny: destinyUid, message: text })
     }
 
     useEffect(() => {
+        setTimeout(() => {
+            childRef.current.scrollIntoView({ behavior: 'smooth' })
+        }, 0)
+    }, [messageArray])
+
+    useEffect(() => {
+        setDestinyUid(Cookies.get('destiny'))
         textInputRef.current.focus()
     }, [])
 
     return (
-        <div className="chat-container flex">
-            <div className="w-full flex flex-col justify-between relative">
-                <div ref={parentRef} id='message-container' className='h-full overflow-y-auto p-6 gap-4 flex flex-col bg-footer'>
+        <div className="h-screen chat-container flex flex-col">
+            <Header />
+
+            <div className="h-screen max-h-screen  w-full flex flex-col justify-between relative overflow-hidden">
+                <div 
+                    ref={parentRef} 
+                    id='message-container' 
+                    className='h-full max-h-screen overflow-y-auto p-6 gap-4 flex flex-col bg-footer'
+                >
                     {messageArray.map(message => {
                         return <div className='self-start' key={message.key}>
                                     {fileRenders[message.group](message)}

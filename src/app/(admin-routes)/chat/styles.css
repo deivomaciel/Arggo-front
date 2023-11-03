@@ -12,8 +12,6 @@ textarea::-webkit-scrollbar-thumb {
     border: 3px solid white;
 }
 
-
-
 #message-container::-webkit-scrollbar {
     width: 20px;
 }
@@ -26,8 +24,4 @@ textarea::-webkit-scrollbar-thumb {
     background-color: #a8a29e;
     border-radius: 16px;
     border: 6px solid #f2f2f2;
-}
-
-.chat-container {
-    height: calc(100vh - 56.11px);
 }
