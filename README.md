@@ -7,7 +7,7 @@
 ##
 
 ### Sobre
-<p>Aggor é uma plataforma que oferece a você a facilidade de compartilhar links, arquivos e textos de maneira rápida e descomplicada entre dispositivos. Basta abrir a aplicação em ambos os dispositivos que você deseja conectar, inserir o código fornecido e transferir o conteúdo desejado com praticidade.</p>
+<p>Arggo é uma plataforma que oferece a você a facilidade de compartilhar links, arquivos e textos de maneira rápida e descomplicada entre dispositivos. Basta abrir a aplicação em ambos os dispositivos que você deseja conectar, inserir o código fornecido e transferir o conteúdo desejado com praticidade.</p>
 
 ### Tecnologias:
 
