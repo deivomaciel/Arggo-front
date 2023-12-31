@@ -9,7 +9,6 @@ import getFileType from '../../components/fileGroups'
 import ImageComponent from '../../components/ImageComponent'
 import DocsComponent from '../../components/DocsComponent'
 import Cookies from 'js-cookie'
-import { ioClient } from '@/app/serveces/server'
 import Header from '@/app/components/Header'
 import './styles.css'
 
@@ -18,7 +17,6 @@ export default function Chat() {
     const textInputRef = useRef(null)
     const parentRef = useRef(null)
     const childRef = useRef(null)
-    const [destinyUid, setDestinyUid] = useState()
     
     const [messageArray, setMessageArray] = useState([]) // BOX
 
@@ -72,12 +70,9 @@ export default function Chat() {
         }
     }
 
-    ioClient.on('recive-message', msg => sendInputText(msg))
-
     const sendMessage = e => {
         e.preventDefault()
         sendInputText(text)
-        ioClient.emit('send-message', { destiny: destinyUid, message: text })
     }
 
     useEffect(() => {
@@ -87,7 +82,6 @@ export default function Chat() {
     }, [messageArray])
 
     useEffect(() => {
-        setDestinyUid(Cookies.get('destiny'))
         textInputRef.current.focus()
     }, [])
 

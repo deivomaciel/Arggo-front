@@ -4,21 +4,10 @@ import Logo from '../assets/logodesk.png'
 import { useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/navigation'
-import { ioClient } from '../serveces/server'
  
 function Header() {
     const [logoutButtonState, setLogoutButtonState] = useState(false)
     const router = useRouter()
-
-    const handleLogout = () => {
-        const destiny = Cookies.get('destiny')
-        ioClient.emit('disconnected', destiny)
-        Cookies.remove('destiny')
-        router.replace('/')
-    }
-
-    ioClient.on('disconnected', () => handleLogout())
-    ioClient.on('disconnect', () => handleLogout())
 
     useEffect(() => {
         Cookies.get('destiny') && setLogoutButtonState(true)
@@ -38,7 +27,6 @@ function Header() {
                 logoutButtonState && 
                 <button 
                     className='transition ease-in-out duration-300 hover:bg-main-300 p-2 px-3 font-bold text-white text-xs rounded-lg border  border-white'
-                    onClick={handleLogout}
                 >
                     Desconectar
                 </button>

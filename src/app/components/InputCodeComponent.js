@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ioClient } from '../serveces/server'
-import Cookies from 'js-cookie'
 
 function InputCode() {
     const router = useRouter()
@@ -15,18 +13,6 @@ function InputCode() {
     const input4 = useRef(null)
   
     const inputList = [input1, input2, input3, input4]
-
-    ioClient.on('error', error => {
-        setErrorMessage('Código inválido!')
-        setInvalidSatate(error.invalidCode)
-    })
-
-    ioClient.on('connected', msg => {
-        Cookies.set('destiny', msg.destiny)
-        router.replace('/chat')
-    })
-
-    const sendCode = code => ioClient.emit('send-code', code)
 
     const updateInputValue = input => {
         (input.value).length > 1 && (input.value = input.value[0])
@@ -55,12 +41,8 @@ function InputCode() {
     useEffect(() => {
         code.length < 4 && setInvalidSatate(false)
         if(code.length == 4) {
-            if(code != localStorage.getItem('code')) {
-                sendCode(code)
-            } else {
-                setErrorMessage('Ops! Você não pode usar este código neste dispositivo.')
-                setInvalidSatate(true)
-            }
+            router.replace('/chat')
+            console.log('ok')
         }
     }, [code])
 

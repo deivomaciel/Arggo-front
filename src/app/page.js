@@ -24,7 +24,7 @@ export default function Home() {
     }
 
     useEffect(() => {
-        connect()
+        console.log('Tá funfano')
     }, [])
 
     return (

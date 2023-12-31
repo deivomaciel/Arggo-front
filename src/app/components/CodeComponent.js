@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { ioClient } from "../serveces/server"
 import Cookies from "js-cookie"
 import { useRouter } from "next/navigation"
 
@@ -12,36 +11,6 @@ function Code() {
     const codeArray = code.split('')
     const router = useRouter()
 
-    ioClient.on('code-expired', msg => {
-        setRedyToNextCode(!msg.codeExpired)
-        localStorage.clear()
-        console.log('Código expirado!')
-    })
-
-    ioClient.on('time-to-expire', time => {
-        setTimeToExpire(time)
-        localStorage.setItem('timeToExpire', time)
-    })
-
-    ioClient.on('redirect', msg => {
-        localStorage.removeItem('code')
-        localStorage.removeItem('timeToExpire')
-        Cookies.set('destiny', msg.destiny)
-        router.replace('/chat')
-    })
-
-    useEffect(() => {
-        if(localStorage.getItem('code')) {
-            setCode(localStorage.getItem('code'))
-        
-        } else {
-            ioClient.emit('get-code')
-            ioClient.on('get-code', code => {
-                setCode(code)
-                localStorage.setItem('code', code)
-            })
-        }
-    }, [])
 
     return (
         <div className='flex items-center flex-col gap-4 w-80'>
