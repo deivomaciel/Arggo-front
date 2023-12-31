@@ -42,7 +42,7 @@ function InputCode() {
         code.length < 4 && setInvalidSatate(false)
         if(code.length == 4) {
             router.replace('/chat')
-            console.log('ok')
+            console.log(code)
         }
     }, [code])
 
